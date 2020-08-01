@@ -18,13 +18,17 @@ router.post('/', (req, res) => {
         .save()
         .then(order => {
             res.json({
-                message: "Order saved",
+                message: "Order register order",
                 orderInfo: {
                     id: order._id,
                     product: order.product,
-                    quantity: order.quantity
+                    quantity: order.quantity,
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:7000/order" + order._id
+                    }
                 }
-            })
+            });
         })
         .catch(err => {
             res.json({
@@ -39,6 +43,23 @@ router.get('/', (req, res) => {
         .find()
         .populate('product', ['name', 'price'])
         .then(docs => {
+
+            const response = {
+                count: docs.length,
+                orders: docs.map(doc => {
+                    return {
+                        id: doc._id,
+                        product: doc.product,
+                        quantity: doc.quantity,
+                        // 자동화
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:7000/order"
+                        }
+                    }
+                })
+            }
+
             res.json(docs)
         })
         .catch(err => {
@@ -48,8 +69,7 @@ router.get('/', (req, res) => {
         });
 })
 
-// 상세 오더 불러오기
-
+// order detail retrieve API
 router.get('/:orderID', (req, res) => {
 
     orderModel
@@ -73,12 +93,6 @@ router.get('/:orderID', (req, res) => {
         })
 
 })
-
-
-
-
-
-
 
 // order Update API
 router.patch('/', (req, res) => {
