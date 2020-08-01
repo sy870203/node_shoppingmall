@@ -81,14 +81,62 @@ router.get('/:productID', (req, res) => {
         });
 })
 
+// product Update API
+router.patch('/:productID', (req, res) => {
+
+    const updateOps = {};
+
+    for (const ops of req.body) {
+          updateOps[ops.propName] = ops.value
+    };
 
 
-// product update API
-router.patch("/", (req, res) => {
-    res.json({
-        message: "product Update API"
-    })
+    productModel
+        .findByIdAndUpdate(req.params.productID, {$set: updateOps})
+        .then(result => {
+            res.json({
+                message: "updated product",
+                result: result
+            });
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            });
+        });
 })
+
+// // product update API
+// router.patch("/:productID'", (req, res) => {
+    
+//     console.log(req.body);
+
+//     //수정할 내용 정의
+//     const updateOps = {};
+
+//     for (const ops of req.body) {
+//         updateOps[ops.propName] = ops.value
+//     } 
+//     console.log(updateOps);
+    
+//     productModel
+//         .findByIdAndUpdate(req.params.productID, {$set: updateOps})
+//         .then(result => {
+//             res.json({
+//                 message: "updated product",
+//                 result: result
+//             });
+//         })
+//         .catch(err => {
+//             res.json({
+//                 message: err.message
+//             })
+//         });
+    
+//     // res.json({
+//     //     message: "product Update API"
+//     // })
+// })
 
 // product delete API
 router.delete("/:productID", (req, res) => {
