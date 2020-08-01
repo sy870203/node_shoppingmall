@@ -16,10 +16,18 @@ router.post('/', (req, res) => {
 
     newUser
         .save()
-        .then(user => {
+        .then(product => {
             res.json({
                 message: "successful register user",
-                userInfo: user
+                userInfo: {
+                    id: product._id,
+                    name: product.name,
+                    price: product.price,
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:7000/product/" + product._id
+                    }
+                }
             });
         })
         .catch(err => {
@@ -47,10 +55,28 @@ router.get("/", (req, res) => {
     productModel
         .find()
         .then(docs => {
-            res.json({
+            // res.json({
+            //     count: docs.length,
+            //     products: docs
+            // });
+
+            const response = {
                 count: docs.length,
-                products: docs
-            })
+                products: docs.map(doc => {
+                    return {
+                        id: doc._id,
+                        name: doc.name,
+                        price: doc.price,
+                        // 자동화
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:7000/product/" + doc._id
+                        }
+                    }
+                })
+            }
+
+            res.json(response);
         })
         .catch(err => {
             res.json({
@@ -71,7 +97,15 @@ router.get('/:productID', (req, res) => {
         .then(doc => {
             res.json({
                 message: "successful product data" + req.params.productID,
-                productInfo: doc
+                productInfo: {
+                    id: doc._id,
+                    name: doc.name,
+                    price: doc.price,
+                    request: {
+                        type: "GET",
+                        url: "http://localhost:7000/product"
+                    }
+                }
             });
         })
         .catch(err => {
@@ -96,7 +130,10 @@ router.patch('/:productID', (req, res) => {
         .then(result => {
             res.json({
                 message: "updated product",
-                result: result
+                request: {
+                    type: "GET",
+                    url: "http://localhost:7000/product/" + req.params.productID
+                }
             });
         })
         .catch(err => {
@@ -106,18 +143,15 @@ router.patch('/:productID', (req, res) => {
         });
 })
 
-// // product update API
+// product update API
 // router.patch("/:productID'", (req, res) => {
-    
-//     console.log(req.body);
 
 //     //수정할 내용 정의
 //     const updateOps = {};
 
 //     for (const ops of req.body) {
 //         updateOps[ops.propName] = ops.value
-//     } 
-//     console.log(updateOps);
+//     };
     
 //     productModel
 //         .findByIdAndUpdate(req.params.productID, {$set: updateOps})
@@ -130,12 +164,8 @@ router.patch('/:productID', (req, res) => {
 //         .catch(err => {
 //             res.json({
 //                 message: err.message
-//             })
+//             });
 //         });
-    
-//     // res.json({
-//     //     message: "product Update API"
-//     // })
 // })
 
 // product delete API
@@ -145,7 +175,11 @@ router.delete("/:productID", (req, res) => {
         .findByIdAndDelete(req.params.productID)
         .then(() => {
             res.json({
-                message: "deleted at " + req.params.productID
+                message: "deleted at " + req.params.productID,
+                request: {
+                    type: "GET",
+                    url: "http://localhost:7000/product"
+                }
             })
         })
         .catch(err => {
