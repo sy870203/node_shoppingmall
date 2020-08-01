@@ -25,7 +25,7 @@ router.post('/', (req, res) => {
                     quantity: order.quantity,
                     request: {
                         type: "GET",
-                        url: "http://localhost:7000/order" + order._id
+                        url: "http://localhost:7000/order/" + order._id
                     }
                 }
             });
@@ -39,6 +39,7 @@ router.post('/', (req, res) => {
 
 // order Retrieve API
 router.get('/', (req, res) => {
+    
     orderModel
         .find()
         .populate('product', ['name', 'price'])
@@ -54,18 +55,17 @@ router.get('/', (req, res) => {
                         // 자동화
                         request: {
                             type: "GET",
-                            url: "http://localhost:7000/order"
+                            url: "http://localhost:7000/order/" + doc._id
                         }
                     }
                 })
             }
-
-            res.json(docs)
+            res.json(response)
         })
         .catch(err => {
             res.json({
                 message: err.message
-            });
+            })
         });
 })
 
@@ -89,8 +89,10 @@ router.get('/:orderID', (req, res) => {
             });
         })
         .catch(err => {
-            message: err.message
-        })
+            res.json({
+                message: err.message
+            });
+        });
 
 })
 
@@ -110,7 +112,7 @@ router.patch('/:orderID', (req, res) => {
                 message: "updated order",
                 request: {
                     type: "GET",
-                    url: "http://localhost:7000/order" + req.params.orderID
+                    url: "http://localhost:7000/order/" + req.params.orderID
                 }
             });
         })

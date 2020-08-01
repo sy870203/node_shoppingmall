@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
 })
 
 // product Retrieve API
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
 
     productModel
         .find()
