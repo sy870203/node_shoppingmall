@@ -43,10 +43,45 @@ router.post('/', (req, res) => {
 
 // product Retrieve API
 router.get("/", (req, res) => {
-    res.json({
-        message: "product Retrieve API"
-    })
+
+    productModel
+        .find()
+        .then(docs => {
+            res.json({
+                count: docs.length,
+                products: docs
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        });
+
+    // res.json({
+    //     message: "product Retrieve API"
+    // })
 })
+
+// product detail retrieve API
+router.get('/:productID', (req, res) => {
+    
+    productModel
+        .findById(req.params.productID)
+        .then(doc => {
+            res.json({
+                message: "successful product data" + req.params.productID,
+                productInfo: doc
+            });
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            });
+        });
+})
+
+
 
 // product update API
 router.patch("/", (req, res) => {
@@ -56,10 +91,25 @@ router.patch("/", (req, res) => {
 })
 
 // product delete API
-router.delete("/", (req, res) => {
-    res.json({
-        message: "product Delete API"
-    })
+router.delete("/:productID", (req, res) => {
+
+    productModel
+        .findByIdAndDelete(req.params.productID)
+        .then(() => {
+            res.json({
+                message: "deleted at " + req.params.productID
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        });
+
+
+    // res.json({
+    //     message: "product Delete API"
+    // })
 })
 
 
