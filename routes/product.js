@@ -2,20 +2,43 @@
 const express = require('express');
 const router = express.Router();
 
+const productModel = require('../models/product');
+
 // product C.R.U.D
 
 // product Create API
 router.post('/', (req, res) => {
-    
-    const newProduct = {
+
+    const newUser = new productModel({
         name: req.body.productname,
         price: req.body.productprice
-    }
-
-    res.json({
-        message: "product Create API",
-        productInfo: newProduct
     })
+
+    newUser
+        .save()
+        .then(user => {
+            res.json({
+                message: "successful register user",
+                userInfo: user
+            });
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        });
+
+
+    
+    // const newProduct = {
+    //     name: req.body.productname,
+    //     price: req.body.productprice
+    // }
+
+    // res.json({
+    //     message: "product Create API",
+    //     productInfo: newProduct
+    // })
 })
 
 // product Retrieve API
