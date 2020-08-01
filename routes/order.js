@@ -95,10 +95,30 @@ router.get('/:orderID', (req, res) => {
 })
 
 // order Update API
-router.patch('/', (req, res) => {
-    res.json({
-        message: "order Update API"
-    })
+router.patch('/:orderID', (req, res) => {
+    
+    const updateOps = {};
+
+    for (const ops of req.body) {
+        updateOps[ops.propName] = ops.value
+    };
+
+    orderModel
+        .findByIdAndUpdate(req.params.orderID, {$set: updateOps})
+        .then(result => {
+            res.json({
+                message: "updated order",
+                request: {
+                    type: "GET",
+                    url: "http://localhost:7000/order" + req.params.orderID
+                }
+            });
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            });
+        });
 })
 
 // order Delete API
