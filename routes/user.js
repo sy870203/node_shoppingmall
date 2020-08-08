@@ -43,7 +43,7 @@ router.post("/signup", (req, res) => {
                             .catch(err => {
                                 console.log(err);
                                 res.status(500).json({
-                                    error: err
+                                    error: err.message
                                 });
                             });
                     }
@@ -56,36 +56,38 @@ router.post("/signup", (req, res) => {
                 error: err.message
             })
         })
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
 });
 
 // 로그인
 router.post("/login", (req, res) => {
-
+    // email 유무체크 email이 있어야한다. 있어야 로그인이 가능하기 때문에.
+    // email이 없다면 등록된 email이 없다라는 메세지를 띄워주고, email이 있다면 패스워드 매칭 (암호화된 패스워드 풀어줘야한다.)
+    userModel
+        .findOne({email: req.body.email})
+        .then(user => {
+            if(!user){
+                return res.status(409).json({
+                    message: "No email"
+                })
+            } else {
+                bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+                    if(err || isMatch === false) {
+                        return res.status(401).json({
+                            message: "password Incorrect"
+                        })
+                    } else {
+                        res.status(200).json({
+                            message: "login success"
+                        })
+                    }
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: error.message
+            })
+        })
 });
 
 
