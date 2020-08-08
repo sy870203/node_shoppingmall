@@ -12,6 +12,8 @@ const productRoute = require("./routes/product");
 
 const orderRoute = require("./routes/order");
 
+const userRoute = require("./routes/user");
+
 // 데이터베이스 연결 
 const dbAdress = "mongodb+srv://admin:tmdduf23@cluster0.gv7zv.mongodb.net/shoppingmall?retryWrites=true&w=majority";
 
@@ -37,6 +39,7 @@ app.use(logger('dev'));
 
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
+app.use("/user", userRoute);
 
 const PORT = 7000;
 
