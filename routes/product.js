@@ -9,12 +9,12 @@ const productModel = require('../models/product');
 // product Create API
 router.post('/', (req, res) => {
 
-    const newUser = new productModel({
+    const newProduct = new productModel({
         name: req.body.productname,
         price: req.body.productprice
     })
 
-    newUser
+    newProduct
         .save()
         .then(product => {
             res.json({
