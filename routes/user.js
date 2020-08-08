@@ -4,6 +4,9 @@ const express = require('express');
 const router = express.Router();
 
 const bcrypt = require('bcryptjs');
+
+const jwt = require('jsonwebtoken'); 
+
 // 4
 const userModel = require("../models/user");
 
@@ -76,8 +79,22 @@ router.post("/login", (req, res) => {
                             message: "password Incorrect"
                         })
                     } else {
+                        // 로그인을 하면 토큰이 발행한다.
+                        // 사용자 정보를 담은 token이라는 곳에 담아서 던져줄 것이다
+                        // 자동 로그인 브라우저나 핸드폰에 토큰이 저장되어있는 것 토큰은 시간제한이 있다.
+                        const token = jwt.sign(
+
+                            {email: user.email, userId: user._id},
+                            // 암호화된 key, 키가 제대로 만들어졌는지 안만들어졌는지 구분,검증을 해주는 key
+                            "secret", 
+                            // 만료 시간 설정
+                            {expiresIn: "1d"}
+                        )
+
+
                         res.status(200).json({
-                            message: "login success"
+                            message: "login success",
+                            token: token
                         })
                     }
                 })
