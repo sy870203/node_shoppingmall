@@ -78,7 +78,7 @@ exports.login_user = (req, res) => {
 
                             {email: user.email, userId: user._id},
                             // 암호화된 key, 키가 제대로 만들어졌는지 안만들어졌는지 구분,검증을 해주는 key
-                            "secret", 
+                            process.env.SECRET_KEY, 
                             // 만료 시간 설정
                             {expiresIn: "1d"}
                         )

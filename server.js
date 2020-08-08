@@ -3,6 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const logger = require('morgan');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 
 
@@ -25,7 +28,7 @@ app.use("/product", productRoute);
 app.use("/order", orderRoute);
 app.use("/user", userRoute);
 
-const PORT = 7000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, console.log("server started"));
 
