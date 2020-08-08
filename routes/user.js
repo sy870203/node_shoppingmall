@@ -13,6 +13,7 @@ const userModel = require("../models/user");
 
 // 회원가입
 router.post("/signup", (req, res) => {
+    // "../models/user"에 있는 스키마를 가져온다.
     userModel
         // 사용자가 입력한 email을 찾을 것이다.
         .findOne({email: req.body.email})
@@ -90,8 +91,6 @@ router.post("/login", (req, res) => {
                             // 만료 시간 설정
                             {expiresIn: "1d"}
                         )
-
-
                         res.status(200).json({
                             message: "login success",
                             token: token
