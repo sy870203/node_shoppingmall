@@ -19,17 +19,14 @@ const dbAdress = "mongodb+srv://admin:tmdduf23@cluster0.gv7zv.mongodb.net/shoppi
 
 const options = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 }
-
-
 
 mongoose
     .connect(dbAdress, options)
     .then(() => console.log("mongoDB connected ..."))
     .catch(err => console.log(err.message));
-
-
 
 // middleware 설정
 app.use(bodyParser.json());
