@@ -3,11 +3,12 @@ const express = require('express');
 const router = express.Router();
 
 const orderModel = require("../models/order");
+const checkAuth = require('../middleware/check-auth');
 
 //3 order CRUD
 
 // order Create API
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
 
     const newOrder = new orderModel({
         product: req.body.productId,
@@ -38,7 +39,7 @@ router.post('/', (req, res) => {
 })
 
 // order Retrieve API
-router.get('/', (req, res) => {
+router.get('/', checkAuth, (req, res) => {
     
     orderModel
         .find()
@@ -70,7 +71,7 @@ router.get('/', (req, res) => {
 })
 
 // order detail retrieve API
-router.get('/:orderID', (req, res) => {
+router.get('/:orderID', checkAuth, (req, res) => {
 
     orderModel
         .findById(req.params.orderID)
@@ -97,7 +98,7 @@ router.get('/:orderID', (req, res) => {
 })
 
 // order Update API
-router.patch('/:orderID', (req, res) => {
+router.patch('/:orderID', checkAuth, (req, res) => {
     
     const updateOps = {};
 
@@ -124,7 +125,7 @@ router.patch('/:orderID', (req, res) => {
 })
 
 // order Delete API
-router.delete('/:orderID', (req, res) => {
+router.delete('/:orderID', checkAuth, (req, res) => {
 
     orderModel
         .findByIdAndDelete(req.params.orderID)

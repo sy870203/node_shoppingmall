@@ -3,11 +3,12 @@ const express = require('express');
 const router = express.Router();
 
 const productModel = require('../models/product');
+const checkAuth = require("../middleware/check-auth");
 
 // product C.R.U.D
 
 // product Create API
-router.post('/', (req, res) => {
+router.post('/', checkAuth, (req, res) => {
 
     const newProduct = new productModel({
         name: req.body.productname,
@@ -90,7 +91,7 @@ router.get('/', (req, res) => {
 })
 
 // product detail retrieve API
-router.get('/:productID', (req, res) => {
+router.get('/:productID', checkAuth, (req, res) => {
     
     productModel
         .findById(req.params.productID)
@@ -116,7 +117,7 @@ router.get('/:productID', (req, res) => {
 })
 
 // product Update API
-router.patch('/:productID', (req, res) => {
+router.patch('/:productID', checkAuth, (req, res) => {
 
     const updateOps = {};
 
@@ -169,7 +170,7 @@ router.patch('/:productID', (req, res) => {
 // })
 
 // product delete API
-router.delete("/:productID", (req, res) => {
+router.delete("/:productID", checkAuth, (req, res) => {
 
     productModel
         .findByIdAndDelete(req.params.productID)
